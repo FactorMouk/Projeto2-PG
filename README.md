@@ -18,5 +18,5 @@ Siga os seguintes passos:
 
 - Baixe um clone do repositório com o Git
 - Na raiz do projeto, execute o comando `npm install`
-- Após a instalação dos pacotes, execure `npm start`
+- Após a instalação dos pacotes, execute `npm start`
 - Veja a beleza das Curvas de Bézier
