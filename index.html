@@ -4,9 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Curvas de Bézier</title>
+    <link rel="shortcut icon" href="src/assets/bezier.ico" type="image/x-icon">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <script src="src/scripts/index.ts"></script>
 </head>
 <body>
-    <main></main>
+    <aside>
+        <header>
+            <h1>CURVAS DE BÉZIER</h1>
+            <hr>
+        </header>
+        <footer>
+            <hr>
+            <p>&copy; 2020 - João Vitor Oliveira</p>
+            <p>
+                Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> and <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+            </p>
+        </footer>
+    </aside>
+    <main>
+        <section class="first-column-buttons">
+            <button>
+                <img src="src/assets/icons/add.png">
+            </button>
+            <button>
+                <img src="src/assets/icons/delete.png">
+            </button>
+            <div class="arrows">
+                <button>
+                    <img src="src/assets/icons/arrow.png" style="transform: rotate(180deg);">
+                </button>
+                <button>
+                    <img src="src/assets/icons/arrow.png">
+                </button>
+            </div>
+            <hr>
+            <div class="input">
+                <p>Avaliações da curva selecionada</p>
+                <input type="number" min="0">
+            </div>
+        </section>
+        <section>
+            <div id="canvas-container"></div>
+        </section>
+        <section class="last-column-buttons">
+            <div>
+                <button>
+                    <img src="src/assets//icons/visible.png">
+                </button>
+                <p>Pontos de controle</p>
+            </div>
+            <div>
+                <button>
+                    <img src="src/assets//icons/visible.png">
+                </button>
+                <p>Poligonais de controle</p>
+            </div>
+            <div>
+                <button>
+                    <img src="src/assets//icons/visible.png">
+                </button>
+                <p>Curvas</p>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
