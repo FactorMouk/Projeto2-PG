@@ -22,8 +22,18 @@ export default class DrawTable {
     return this._curves;
   }
 
+  public get selectedCurve(): Curve {
+    return this._curves[this._selectedCurveIndex];
+  }
+
   public createNewCurve(): void {
     this._curves.push(new Curve());
+    this._selectedCurveIndex = this._curves.length - 1;
+  }
+
+  public deleteSelectedCurve(): void {
+    this._curves.splice(this._selectedCurveIndex, 1);
+    this._selectedCurveIndex = this._curves.length - 1;
   }
 
   public changeSelectedCurve(type: string): void {
@@ -41,6 +51,7 @@ export default class DrawTable {
       this._selectedCurveIndex === this._curves.length - 1
     )
       this._selectedCurveIndex = 0;
+    console.log(this._selectedCurveIndex);
   }
 
   public display(): void {

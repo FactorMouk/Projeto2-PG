@@ -23,8 +23,10 @@ export default class Curve {
 
   public deleteControlPoint(point: Point): void {
     const index = this._controlPoints.indexOf(point);
-    this._controlPoints = this._controlPoints.splice(index, 1);
+    this._controlPoints.splice(index, 1);
   }
 
-  public display(): void {}
+  public display(): void {
+    this._controlPoints.forEach((controlPoint) => controlPoint.display());
+  }
 }
