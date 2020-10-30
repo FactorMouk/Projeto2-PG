@@ -6,7 +6,6 @@ export default class MainState {
   private _controlPointsMode = null;
   private _thereAreCurves = false;
   private _selectedCurveHasThreePoints = false;
-  private _avaliations = 0;
   private _controlPointsIsVisible = true;
   private _controlPolygonsIsVisible = true;
   private _curvesIsVisible = true;
@@ -30,6 +29,7 @@ export default class MainState {
   public _addControlPointSubject: Subject<boolean> = new Subject<boolean>();
   public _moveControlPointSubject: Subject<boolean> = new Subject<boolean>();
   public _deleteControlPointSubject: Subject<boolean> = new Subject<boolean>();
+  public _pointsAmountSubject: Subject<number> = new Subject<number>();
 
   constructor() {
     this.defineListeners();
@@ -68,10 +68,6 @@ export default class MainState {
     this._selectedCurveHasThreePoints = selectedCurveHasThreePoints;
   }
 
-  public get avaliations(): number {
-    return this._avaliations;
-  }
-
   public get controlPointsIsVisible(): boolean {
     return this._controlPointsIsVisible;
   }
@@ -82,6 +78,13 @@ export default class MainState {
 
   public get curvesIsVisible(): boolean {
     return this._curvesIsVisible;
+  }
+
+  public setPointsAmountInput(pointsAmountInput: number): void {
+    const input: HTMLInputElement = <HTMLInputElement>(
+      document.getElementById('points-amount-input')
+    );
+    input.value = pointsAmountInput.toString();
   }
 
   public disableButtons(disabled: boolean, exceptions: Array<string>): void {
@@ -261,6 +264,7 @@ export default class MainState {
           this.fadeOutNotCurvesAlert(true);
         }
         this.onControlPointsLessThenThree();
+        this.setPointsAmountInput(2);
         this._addCurveSubject.next(true);
       });
       this._deleteCurveButton.addEventListener('click', () =>
@@ -297,7 +301,11 @@ export default class MainState {
         this.previewButtonsFormatter();
       });
       this._pointsAmountInput.addEventListener('change', () => {
-        this._avaliations = parseInt(this._pointsAmountInput.value);
+        if (parseInt(this._pointsAmountInput.value) < 2) {
+          this._pointsAmountSubject.next(2);
+          this.setPointsAmountInput(2);
+        }
+        this._pointsAmountSubject.next(parseInt(this._pointsAmountInput.value));
       });
     }
   }

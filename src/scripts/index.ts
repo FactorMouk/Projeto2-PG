@@ -29,9 +29,10 @@ const sketch = (p5: P5) => {
     ) {
       const controlPoints = drawTable.selectedCurve.controlPoints;
       if (mainState.controlPointsMode == 'add') {
+        drawTable.selectedCurve._isDrawing = true;
         const x = event.offsetX;
         const y = event.offsetY;
-        drawTable.selectedCurve.addControlPoint(new Point(x, y, p5));
+        drawTable.selectedCurve.addControlPoint(new Point(x, y, p5, 'control'));
         if (drawTable.selectedCurve.controlPoints.length >= 3) {
           mainState.selectedCurveHasThreePoints = true;
           mainState.fadeOutThreeDotsAlert(true);
@@ -39,6 +40,7 @@ const sketch = (p5: P5) => {
         }
       }
       if (mainState.controlPointsMode === 'move') {
+        drawTable.selectedCurve._isDrawing = true;
         for (let i = 0; i < controlPoints.length; i++) {
           if (controlPoints[i].dragged) {
             if (mainState.controlPointsMode === 'move') {
@@ -50,6 +52,7 @@ const sketch = (p5: P5) => {
         }
       }
       if (mainState.controlPointsMode === 'delete') {
+        drawTable.selectedCurve._isDrawing = true;
         for (let i = 0; i < controlPoints.length; i++) {
           if (
             p5.dist(
@@ -93,6 +96,16 @@ const sketch = (p5: P5) => {
       }
     }
   };
+  p5.mouseDragged = (event: MouseEvent) => {
+    if (
+      mainState.controlPointsMode == 'move' &&
+      mainState.thereAreCurves &&
+      event.target ==
+        document.getElementById('canvas-container').firstElementChild
+    ) {
+      drawTable.selectedCurve._isDrawing = true;
+    }
+  };
 };
 
 //Defining Listeners
@@ -112,15 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
         mainState.disableButtons(true, ['addCurve']);
         mainState.thereAreCurves = false;
         mainState.fadeOutNotCurvesAlert(false);
+        mainState.setPointsAmountInput(2);
+      } else {
+        mainState.setPointsAmountInput(drawTable.selectedCurve.avaliations);
       }
     }
   });
-  mainState._arrowLeftSubject.subscribe((value) =>
-    value ? drawTable.changeSelectedCurve('left') : null,
-  );
-  mainState._arrowRightSubject.subscribe((value) =>
-    value ? drawTable.changeSelectedCurve('right') : null,
-  );
+  mainState._arrowLeftSubject.subscribe((value) => {
+    if (value) {
+      drawTable.changeSelectedCurve('left');
+      mainState.setPointsAmountInput(drawTable.selectedCurve.avaliations);
+    }
+  });
+  mainState._arrowRightSubject.subscribe((value) => {
+    if (value) {
+      drawTable.changeSelectedCurve('right');
+      mainState.setPointsAmountInput(drawTable.selectedCurve.avaliations);
+    }
+  });
   mainState._addControlPointSubject.subscribe((value) =>
     value ? (mainState.controlPointsMode = 'add') : null,
   );
@@ -130,4 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
   mainState._deleteControlPointSubject.subscribe((value) =>
     value ? (mainState.controlPointsMode = 'delete') : null,
   );
+  mainState._pointsAmountSubject.subscribe((value: number) => {
+    drawTable.selectedCurve.avaliations = value;
+    drawTable.selectedCurve._isDrawing = true;
+  });
 });
