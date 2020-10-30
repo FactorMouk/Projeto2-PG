@@ -4,11 +4,13 @@ export default class Point {
   private _P5: p5;
   private _x: number;
   private _y: number;
+  private _dragged: boolean;
 
   constructor(x: number, y: number, P5: p5) {
+    this._P5 = P5;
     this._x = x;
     this._y = y;
-    this._P5 = P5;
+    this._dragged = false;
   }
 
   public get x(): number {
@@ -27,8 +29,26 @@ export default class Point {
     this._y = y;
   }
 
-  display(): void {
-    this._P5.fill(105, 125, 183);
+  public get dragged(): boolean {
+    return this._dragged;
+  }
+
+  public set dragged(dragged: boolean) {
+    this._dragged = dragged;
+  }
+
+  display(isSelected: boolean): void {
+    if (isSelected) {
+      this._P5.fill(105, 125, 183);
+      this._P5.stroke(105, 125, 183);
+    } else {
+      this._P5.fill(220, 220, 220);
+      this._P5.stroke(220, 220, 220);
+    }
+    if (this._dragged) {
+      this._x = this._P5.mouseX;
+      this._y = this._P5.mouseY;
+    }
     this._P5.circle(this._x, this._y, 10);
   }
 }

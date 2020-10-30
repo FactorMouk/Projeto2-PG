@@ -104,15 +104,47 @@ main > .first-column-buttons > .input > input {
   width: 150px;
   margin: 10px 0px;
 }
+main > .canvas-column > .alert-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+}
+main > .canvas-column > .alert-text > img {
+  height: 25px;
+}
+main > .canvas-column > .alert-text > h3 {
+  padding: 20px 10px;
+  color: var(--dim-gray);
+  font-weight: 100;
+}
 main > .last-column-buttons div {
   width: 200px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
+main > .last-column-buttons .control-points-controller {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+#control-point-mode-label {
+  color: var(--black);
+  font-weight: 600;
+  padding: 5px;
+}
+main > .last-column-buttons > hr {
+  border: 1px solid var(--manatee);
+  width: 70%;
+  margin: 20px 0px;
+}
 main > .last-column-buttons div button {
   padding: 10px;
-  margin: 10px;
+  margin: 5px;
 }
 main > .last-column-buttons div > button > img {
   height: 30px;

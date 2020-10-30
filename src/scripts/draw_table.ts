@@ -27,16 +27,18 @@ export default class DrawTable {
   }
 
   public createNewCurve(): void {
-    this._curves.push(new Curve());
+    this.unselectAllPreviousCurves();
+    this._curves.push(new Curve(this._P5));
     this._selectedCurveIndex = this._curves.length - 1;
   }
 
   public deleteSelectedCurve(): void {
     this._curves.splice(this._selectedCurveIndex, 1);
-    this._selectedCurveIndex = this._curves.length - 1;
+    this.changeSelectedCurve('left');
   }
 
   public changeSelectedCurve(type: string): void {
+    const previousIndex = this._selectedCurveIndex;
     if (type === 'left' && this._selectedCurveIndex !== 0)
       this._selectedCurveIndex--;
     else if (type === 'left' && this._selectedCurveIndex === 0)
@@ -51,10 +53,25 @@ export default class DrawTable {
       this._selectedCurveIndex === this._curves.length - 1
     )
       this._selectedCurveIndex = 0;
-    console.log(this._selectedCurveIndex);
+    if (this._curves[previousIndex])
+      this._curves[previousIndex].isSelected = false;
+    if (this._curves[this._selectedCurveIndex])
+      this._curves[this._selectedCurveIndex].isSelected = true;
   }
 
-  public display(): void {
-    this._curves.forEach((curve) => curve.display());
+  private unselectAllPreviousCurves() {
+    this._curves.forEach((curve) => {
+      curve.isSelected = false;
+    });
+  }
+
+  public display(
+    showControlPoints: boolean,
+    showControlPolygons: boolean,
+    showCurves: boolean,
+  ): void {
+    this._curves.forEach((curve) =>
+      curve.display(showControlPoints, showControlPolygons, showCurves),
+    );
   }
 }

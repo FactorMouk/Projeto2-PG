@@ -25,10 +25,11 @@
     </aside>
     <main>
         <section class="first-column-buttons">
-            <button id="add-button">
+            <p>Controle de Curvas</p>
+            <button id="add-curve-button">
                 <img src="src/assets/icons/add.png">
             </button>
-            <button id="delete-button">
+            <button id="delete-curve-button">
                 <img src="src/assets/icons/delete.png">
             </button>
             <div class="arrows">
@@ -45,25 +46,49 @@
                 <input id="points-amount-input" type="number" min="0">
             </div>
         </section>
-        <section>
+        <section class="canvas-column">
+            <div class="alert-text">
+                <img id="alert-icon" src="/src/assets/icons/alert.png">
+                <h3 id="not-curves-alert">Clique no + para inserir uma nova curva</h3>
+                <h3 id="three-dots-alert">Insira ao menos três pontos de controle</h3>
+            </div>
             <div id="canvas-container"></div>
         </section>
         <section class="last-column-buttons">
+            <div class="control-points-controller">
+                <p>Controle de Pontos de Controle</p>
+                <p id="control-point-mode-label"></p>
+                <div>
+                    <button id="add-control-point-button">
+                        <img src="src/assets/icons/add.png">
+                    </button>
+                    <button id="move-control-point-button">
+                        <img src="src/assets/icons/move.png">
+                    </button>
+                    <button id="delete-control-point-button">
+                        <img src="src/assets/icons/delete.png">
+                    </button>
+                </div>
+            </div>
+            <hr>
             <div>
                 <button id="control-points-button">
-                    <img src="src/assets/icons/visible.png">
+                    <img id="cpbv" src="src/assets/icons/visible.png">
+                    <img id="cpbi" style="display: none;" src="src/assets/icons/invisible.png">
                 </button>
                 <p>Pontos de controle</p>
             </div>
             <div>
                 <button id="control-polygons-button">
-                    <img src="src/assets/icons/visible.png">
+                    <img id="cpobv" src="src/assets/icons/visible.png">
+                    <img id="cpobi" style="display: none;" src="src/assets/icons/invisible.png">
                 </button>
                 <p>Poligonais de controle</p>
             </div>
             <div>
                 <button id="curves-button">
-                    <img src="src/assets/icons/visible.png">
+                    <img id="cbv" src="src/assets/icons/visible.png">
+                    <img id="cbi" style="display: none;" src="src/assets/icons/invisible.png">
                 </button>
                 <p>Curvas</p>
             </div>

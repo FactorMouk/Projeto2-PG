@@ -15,17 +15,82 @@ const sketch = (p5: P5) => {
   };
   p5.draw = () => {
     p5.background(255);
-    drawTable.display();
+    drawTable.display(
+      mainState.controlPointsIsVisible,
+      mainState.controlPolygonsIsVisible,
+      mainState.curvesIsVisible,
+    );
   };
-  p5.mouseClicked = (event: MouseEvent) => {
+  p5.mouseReleased = (event: MouseEvent) => {
     if (
       mainState.thereAreCurves &&
       event.target ==
         document.getElementById('canvas-container').firstElementChild
     ) {
-      const x = event.offsetX;
-      const y = event.offsetY;
-      drawTable.selectedCurve.addControlPoint(new Point(x, y, p5));
+      const controlPoints = drawTable.selectedCurve.controlPoints;
+      if (mainState.controlPointsMode == 'add') {
+        const x = event.offsetX;
+        const y = event.offsetY;
+        drawTable.selectedCurve.addControlPoint(new Point(x, y, p5));
+        if (drawTable.selectedCurve.controlPoints.length >= 3) {
+          mainState.selectedCurveHasThreePoints = true;
+          mainState.fadeOutThreeDotsAlert(true);
+          mainState.disableButtons(false, []);
+        }
+      }
+      if (mainState.controlPointsMode === 'move') {
+        for (let i = 0; i < controlPoints.length; i++) {
+          if (controlPoints[i].dragged) {
+            if (mainState.controlPointsMode === 'move') {
+              controlPoints[i].dragged = false;
+            } else if (mainState.controlPointsMode === 'delete') {
+              drawTable.selectedCurve.deleteControlPoint(i);
+            }
+          }
+        }
+      }
+      if (mainState.controlPointsMode === 'delete') {
+        for (let i = 0; i < controlPoints.length; i++) {
+          if (
+            p5.dist(
+              controlPoints[i].x,
+              controlPoints[i].y,
+              p5.mouseX,
+              p5.mouseY,
+            ) < 10
+          ) {
+            drawTable.selectedCurve.deleteControlPoint(i);
+            if (controlPoints.length < 3) {
+              mainState.onControlPointsLessThenThree();
+              mainState.controlPointsMode = 'add';
+            }
+            break;
+          }
+        }
+      }
+    }
+  };
+  p5.mousePressed = (event: MouseEvent) => {
+    if (
+      mainState.controlPointsMode == 'move' &&
+      mainState.thereAreCurves &&
+      event.target ==
+        document.getElementById('canvas-container').firstElementChild
+    ) {
+      const controlPoints = drawTable.selectedCurve.controlPoints;
+      for (let i = 0; i < controlPoints.length; i++) {
+        if (
+          p5.dist(
+            controlPoints[i].x,
+            controlPoints[i].y,
+            p5.mouseX,
+            p5.mouseY,
+          ) < 10
+        ) {
+          controlPoints[i].dragged = true;
+          break;
+        }
+      }
     }
   };
 };
@@ -34,13 +99,20 @@ const sketch = (p5: P5) => {
 document.addEventListener('DOMContentLoaded', () => {
   mainState = MainState.getInstance();
   new P5(sketch);
-  mainState._addSubject.subscribe((value) =>
-    value ? drawTable.createNewCurve() : null,
-  );
-  mainState._deleteSubject.subscribe((value) => {
+  mainState._addCurveSubject.subscribe((value) => {
+    if (value) {
+      drawTable.createNewCurve();
+      mainState.controlPointsMode = 'add';
+    }
+  });
+  mainState._deleteCurveSubject.subscribe((value) => {
     if (value) {
       drawTable.deleteSelectedCurve();
-      if (drawTable.curves.length === 0) mainState.disableButtons(true);
+      if (drawTable.curves.length === 0) {
+        mainState.disableButtons(true, ['addCurve']);
+        mainState.thereAreCurves = false;
+        mainState.fadeOutNotCurvesAlert(false);
+      }
     }
   });
   mainState._arrowLeftSubject.subscribe((value) =>
@@ -49,10 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
   mainState._arrowRightSubject.subscribe((value) =>
     value ? drawTable.changeSelectedCurve('right') : null,
   );
-  mainState._controlPolygonsSubject.subscribe((value) =>
-    value ? console.log(value) : null,
+  mainState._addControlPointSubject.subscribe((value) =>
+    value ? (mainState.controlPointsMode = 'add') : null,
   );
-  mainState._curvesSubject.subscribe((value) =>
-    value ? console.log(value) : null,
+  mainState._moveControlPointSubject.subscribe((value) =>
+    value ? (mainState.controlPointsMode = 'move') : null,
+  );
+  mainState._deleteControlPointSubject.subscribe((value) =>
+    value ? (mainState.controlPointsMode = 'delete') : null,
   );
 });
