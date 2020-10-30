@@ -44,6 +44,19 @@ header > hr {
   width: 75%;
   align-self: center;
 }
+.references {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.references h3 {
+  color: var(--platinum);
+}
+.references a {
+  margin: 10px;
+  color: var(--manatee);
+}
 footer {
   grid-row: 3 / span 1;
   display: flex;
@@ -103,6 +116,7 @@ main > .first-column-buttons > .input > input {
   height: 50px;
   width: 150px;
   margin: 10px 0px;
+  text-align: center;
 }
 main > .canvas-column > .alert-text {
   display: flex;
